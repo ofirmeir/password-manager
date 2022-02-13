@@ -1,6 +1,7 @@
 from tkinter import Tk, Button, Label, Entry, Canvas, PhotoImage, END, messagebox
 from random import randint, choice, shuffle
 import pyperclip
+import json
 
 # CONSTANTS
 
@@ -58,6 +59,12 @@ def save():
     website_value = entry_website.get()
     email_username_value = entry_email_username.get()
     password_value = entry_password.get()
+    new_record = {
+        website_value: {
+            "email": email_username_value,
+            "password": password_value
+        }
+    }
 
     if len(website_value) == 0 or len(password_value) == 0:
         info_message = messagebox.showinfo(title="Oops", message="Do not leave website or password fields empty")
@@ -68,11 +75,20 @@ def save():
                                                                          f"password: {password_value}\n"
                                                                          f"Add details to the file?")
         if is_ok:
-            with open("data.txt", mode="a") as data_file:
-                data_file.write(f"{website_value} | {email_username_value} | {password_value}\n")
-            # clear website and password fields
-            entry_website.delete(0, END)
-            entry_password.delete(0, END)
+            try:
+                with open("data.json", mode="r") as data_file:
+                    records = json.load(data_file)
+            except FileNotFoundError:
+                with open("data.json", mode="w") as data_file:
+                    json.dump(new_record, data_file, indent=4)
+            else:
+                records.update(new_record)
+                with open("data.json", mode="w") as data_file:
+                    json.dump(records, data_file, indent=4)
+            finally:
+                # clear website and password fields
+                entry_website.delete(0, END)
+                entry_password.delete(0, END)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
