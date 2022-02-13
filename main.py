@@ -2,21 +2,36 @@ from tkinter import Tk, Button, Label, Entry, Canvas, PhotoImage, END, messagebo
 from random import randint, choice, shuffle
 import pyperclip
 
+# CONSTANTS
+
+LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+SYMBOLS = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+MIN_NUMBER_OF_LETTERS = 8
+MAX_NUMBER_OF_LETTERS = 10
+MIN_NUMBER_OF_SYMBOLS = 2
+MAX_NUMBER_OF_SYMBOLS = 4
+MIN_NUMBER_OF_NUMBERS = 2
+MAX_NUMBER_OF_NUMBERS = 4
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 
 def generate_password():
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+    """
+    upon clicking "generate password" button,
+    creates a password according to the policy,
+    populates is it the entry field and saves
+    a copy to the clipboard
+    """
+    nr_letters = randint(MIN_NUMBER_OF_LETTERS, MAX_NUMBER_OF_LETTERS)
+    nr_symbols = randint(MIN_NUMBER_OF_SYMBOLS, MAX_NUMBER_OF_SYMBOLS)
+    nr_numbers = randint(MIN_NUMBER_OF_NUMBERS, MAX_NUMBER_OF_NUMBERS)
 
-    nr_letters = randint(8, 10)
-    nr_symbols = randint(2, 4)
-    nr_numbers = randint(2, 4)
-
-    letters_list = [choice(letters) for _ in range(nr_letters)]
-    symbols_list = [choice(symbols) for _ in range(nr_symbols)]
-    numbers_list = [choice(numbers) for _ in range(nr_numbers)]
+    letters_list = [choice(LETTERS) for _ in range(nr_letters)]
+    symbols_list = [choice(SYMBOLS) for _ in range(nr_symbols)]
+    numbers_list = [choice(NUMBERS) for _ in range(nr_numbers)]
 
     password_list = letters_list + symbols_list + numbers_list
 
@@ -34,6 +49,12 @@ def generate_password():
 
 
 def save():
+    """
+    upon clicking the "Add" button,
+    verifies that no required fields are empty,
+    shows a confirmation message and
+    saves the values to a file
+    """
     website_value = entry_website.get()
     email_username_value = entry_email_username.get()
     password_value = entry_password.get()
