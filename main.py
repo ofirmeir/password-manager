@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Label, Entry, Canvas, PhotoImage, END
+from tkinter import Tk, Button, Label, Entry, Canvas, PhotoImage, END, messagebox
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -8,11 +8,21 @@ def save():
     website_value = entry_website.get()
     email_username_value = entry_email_username.get()
     password_value = entry_password.get()
-    with open("data.txt", mode="a") as data_file:
-        data_file.write(f"{website_value} | {email_username_value} | {password_value}\n")
-    # clear website and password fields
-    entry_website.delete(0, END)
-    entry_password.delete(0, END)
+
+    if len(website_value) == 0 or len(password_value) == 0:
+        info_message = messagebox.showinfo(title="Oops", message="Do not leave website or password fields empty")
+    else:
+        is_ok = messagebox.askokcancel(title=f"{website_value}", message=f"The details you've entered are:\n"
+                                                                         f"website: {website_value}\n"
+                                                                         f"email:{email_username_value}\n"
+                                                                         f"password: {password_value}\n"
+                                                                         f"Add details to the file?")
+        if is_ok:
+            with open("data.txt", mode="a") as data_file:
+                data_file.write(f"{website_value} | {email_username_value} | {password_value}\n")
+            # clear website and password fields
+            entry_website.delete(0, END)
+            entry_password.delete(0, END)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
