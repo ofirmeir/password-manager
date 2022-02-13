@@ -16,6 +16,30 @@ MAX_NUMBER_OF_SYMBOLS = 4
 MIN_NUMBER_OF_NUMBERS = 2
 MAX_NUMBER_OF_NUMBERS = 4
 
+
+# ------------------------------- SEARCH RECORDS -------------------------------- #
+
+def find_password():
+    """
+    upon clicking on "Search" button,
+    looks for the matching website record from the file
+    or writes an error if file or record does not exist
+    """
+    try:
+        with open("data.json") as data_file:
+            records = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No Data File Found")
+    else:
+        website_name = entry_website.get().lower()
+        if website_name in records.keys():
+            username = records[website_name]["email"]
+            password = records[website_name]["password"]
+            messagebox.showinfo(title=website_name, message=f"Username: {username}\nPassword: {password}")
+        else:
+            messagebox.showinfo(title=website_name, message=f"No details for website {website_name}")
+    pass
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 
@@ -56,7 +80,7 @@ def save():
     shows a confirmation message and
     saves the values to a file
     """
-    website_value = entry_website.get()
+    website_value = entry_website.get().lower()
     email_username_value = entry_email_username.get()
     password_value = entry_password.get()
     new_record = {
@@ -71,7 +95,7 @@ def save():
     else:
         is_ok = messagebox.askokcancel(title=f"{website_value}", message=f"The details you've entered are:\n"
                                                                          f"website: {website_value}\n"
-                                                                         f"email:{email_username_value}\n"
+                                                                         f"email: {email_username_value}\n"
                                                                          f"password: {password_value}\n"
                                                                          f"Add details to the file?")
         if is_ok:
@@ -114,23 +138,26 @@ label_password.grid(row=3, column=0)
 
 # Entries
 
-entry_website = Entry(width=52)
-entry_website.grid(row=1, column=1, columnspan=2, sticky="w")
+entry_website = Entry(width=35)
+entry_website.grid(row=1, column=1, sticky="w")
 entry_website.focus()
 
-entry_email_username = Entry(width=52)
+entry_email_username = Entry(width=55)
 entry_email_username.grid(row=2, column=1, columnspan=2, sticky="w")
 entry_email_username.insert(END, "i.e. alex@gmail.com")
 
-entry_password = Entry(width=31)
+entry_password = Entry(width=35)
 entry_password.grid(row=3, column=1, sticky="w")
 
 # Buttons
 
-btn_generate_password = Button(text="Generate Password", command=generate_password)
+btn_generate_password = Button(text="Generate Password", width=15, command=generate_password)
 btn_generate_password.grid(row=3, column=2, sticky="w")
 
-btn_generate_password = Button(text="Add", width=45, command=save)
+btn_generate_password = Button(text="Search", width=15, command=find_password)
+btn_generate_password.grid(row=1, column=2, sticky="w")
+
+btn_generate_password = Button(text="Add", width=46, command=save)
 btn_generate_password.grid(row=4, column=1, columnspan=2, sticky="w")
 
 window.mainloop()
