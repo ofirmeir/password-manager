@@ -106,13 +106,21 @@ def save():
                 with open("data.json", mode="w") as data_file:
                     json.dump(new_record, data_file, indent=4)
             else:
-                records.update(new_record)
-                with open("data.json", mode="w") as data_file:
-                    json.dump(records, data_file, indent=4)
-            finally:
-                # clear website and password fields
-                entry_website.delete(0, END)
-                entry_password.delete(0, END)
+                add_new_item = True
+                if website_value in records:
+                    add_new_item = messagebox.askyesno(title="Website record exist",
+                                                       message=f"A record for {website_value} already exist.\n"
+                                                               f"should we overwrite it?")
+                if add_new_item:
+                    records.update(new_record)
+                    with open("data.json", mode="w") as data_file:
+                        json.dump(records, data_file, indent=4)
+                else:
+                    return
+
+        # clear website and password fields
+        entry_website.delete(0, END)
+        entry_password.delete(0, END)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
