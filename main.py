@@ -1,7 +1,7 @@
 from tkinter import Tk, Button, Label, Entry, Canvas, PhotoImage, END, messagebox
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
-# ---------------------------- SAVE PASSWORD ------------------------------- #
+# ---------------------------- SAVE PASSWORD ------------------------------------ #
 
 
 def save():
